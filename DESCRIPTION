@@ -2,7 +2,9 @@ Package: teaTasteR
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: c(person("Karsten", "Maurer", , "maurerkt@miamioh.edu", role = c("aut","cre")))
+Author: c(person("Karsten", "Maurer", , "maurerkt@miamioh.edu", role = c("aut","cre")),
+          person("George", "Woodbury", , "woodbug@miamioh.edu", role = c("aut")),
+          person("Seonjin", "Kim", , "kims20@miamioh.edu", role = c("aut")))
 Maintainer: Karsten Maurer <maurerkt@miamioh.edu>
 Description: Package for generating Lady Tasting Tea Line-up plots
 License: What license is it under?
