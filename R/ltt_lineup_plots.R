@@ -24,3 +24,38 @@ tt_lineup_plot = function(lineup_dat){
           axis.ticks = ggplot2::element_blank(),
           axis.title = ggplot2::element_blank())
 }
+
+
+#' Make lineup plot solution key
+#'
+#' Function to return list of plot types related to order of plots, used in assessment step
+#'
+#' @param lineup_dat dataframe structured from \code{\link{make_lineup_dat}}
+#'
+#' @return ggplot
+#' @export
+#'
+#' @examples
+#' dat=data.frame(x=rnorm(50))
+#' dat$y=x+rnorm(50)
+#' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y")
+#' lineup_keyplot(lineup_dat)
+#!# need to fix dependencies on magridr, dplyr and ggplot2
+lineup_keyplot = function(lineup_dat){
+  lineup_dat %>%
+    select(order, type) %>%
+    unique() %>%
+    as.data.frame()%>%
+    mutate(sol_y = 4-(order-1) %/% 4,
+           sol_x = (order-1) %% 4 + 1,
+           type=factor(type, levels=c("null","alt"))) %>%
+    ggplot(aes(x=sol_x, y=sol_y, fill=type, label=paste0("Plot ",order,"\n",type))) +
+    geom_tile(color="black")+
+    geom_text(size=2) +
+    scale_fill_manual(values=c("white","gray80"))+
+    theme_void()+
+    theme(legend.position = "none",
+          plot.title = element_text(hjust=.5))
+}
+#
+
