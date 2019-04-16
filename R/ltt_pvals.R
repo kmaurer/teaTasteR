@@ -17,10 +17,16 @@ ltt=function(M,x) {
   pvalue
 }
 
-#---------------------------------------------------
-## Function to organize lady tasting tea p-values into TeX table
-# inputs: M_range is the range of possible plot pairs in a line-up and x_range is the range for number of incorrect choices.
-# output: lady tasting tea p-value table
+#' Organize lady tasting tea p-values into TeX table
+#'
+#' @param M_range numeric vector with the range of possible plot pairs in a line-up
+#' @param x_range numeric vector with the range for number of incorrect choices
+#'
+#' @return TeX table
+#' @export
+#'
+#' @examples
+#' tea_pval_table(5:10,0:2)
 tea_pval_table = function(M_range=5:10,x_range=0:3){
   tab = expand.grid(M=M_range,x=x_range)
   tab$pvals = sapply(1:nrow(tab), function(i) ltt(tab$M[i], tab$x[i]))
@@ -28,8 +34,6 @@ tea_pval_table = function(M_range=5:10,x_range=0:3){
   names(tab_wide)[1] = "number of pairs / number incorrect"
   print(xtable(tab_wide, digits=5), include.rownames=FALSE)
 }
-# tea_pval_table(5:10,0:2)
-
 
 #---------------------------------------------------
 ## Function to simulate from quadratic curve
