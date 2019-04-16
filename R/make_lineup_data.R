@@ -88,3 +88,17 @@ make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL){
   }
   dat_stacked
 }
+
+## robust kernel selection function
+# source: https://rdrr.io/cran/kernplus/src/R/est_bandwidth.R
+get.dpill <- function(cov, y) {
+  bw <- KernSmooth::dpill(cov, y)
+  if (is.nan(bw)) {
+    par <- 0.06
+    while (is.nan(bw)) {
+      bw <- KernSmooth::dpill(cov, y, proptrun = par)
+      par <- par + 0.01
+    }
+  }
+  return(bw)
+}

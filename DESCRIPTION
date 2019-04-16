@@ -13,3 +13,7 @@ LazyData: true
 URL: https://github.com/kmaurer/teaTasteR
 BugReports: https://github.com/kmaurer/teaTasteR/issues
 RoxygenNote: 6.1.1
+Imports: 
+  ggplot2,
+  KernSmooth,
+  kernplus

@@ -1,0 +1,56 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# teaTasteR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of teaTasteR is to take a dataset and create a "Lady Tasting Tea" lineup plot 
+for doing individual visual inference.
+
+## Installation
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("kmaurer/teaTasteR")
+```
+## Example
+
+In the following example we will demonstrate LTT lineups for testing for independence
+between carat weight and price from the ggplot2 diamonds data
+
+```{r example}
+library(teaTasteR)
+## basic example code
+set.seed(12345)
+small_diamonds <- ggplot2::diamonds[sample(1:nrow(ggplot2::diamonds),100),]
+head(small_diamonds)
+```
+
+We will feed it through the `make_lineup_dat()` function to prepare the data for plotting
+
+```{r dataconvert}
+diamonds_lineup_dat <- make_lineup_dat(M=6, dat=small_diamonds,
+                                       xname="carat", yname="price")
+head(diamonds_lineup_dat)
+```
+
+Then put into lineup plot. 
+
+```{r pressure}
+tt_lineup_plot(diamonds_lineup_dat)
+```

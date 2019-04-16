@@ -15,12 +15,12 @@ tt_lineup_plot = function(lineup_dat){
   lineup_dat$facet_lab = factor(lineup_dat$facet_lab,
                                 levels=paste("Plot",min(lineup_dat$order):max(lineup_dat$order)) )
   ggplot2::ggplot()+
-    ggplot2::geom_point(aes(x=x,y=permy), data=lineup_dat) +
+    ggplot2::geom_point(ggplot2::aes(x=x,y=permy), data=lineup_dat) +
     ggplot2::facet_wrap(~facet_lab)+
     ggplot2::labs(x="",y="")+
     ggplot2::theme_bw()+
-    ggplot2::theme(panel.spacing = unit(.75, "cm"),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          axis.title = element_blank())
+    ggplot2::theme(panel.spacing = ggplot2::unit(.75, "cm"),
+          axis.text = ggplot2::element_blank(),
+          axis.ticks = ggplot2::element_blank(),
+          axis.title = ggplot2::element_blank())
 }
