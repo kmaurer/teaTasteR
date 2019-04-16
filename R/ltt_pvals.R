@@ -35,16 +35,29 @@ tea_pval_table = function(M_range=5:10,x_range=0:3){
   print(xtable(tab_wide, digits=5), include.rownames=FALSE)
 }
 
-#---------------------------------------------------
-## Function to simulate from quadratic curve
-# inputs: sample size, line params
-# output: dataframe with x, y columns
+
+#' Generate data from quadratic curve
+#'
+#' Function to simulate from quadratic curve
+#'
+#' @param n sample size
+#' @param b0 intercept of curve
+#' @param b1 first order poly term
+#' @param b2 second order poly term
+#' @param sd standard deviation for random noise around curve
+#' @param range range of x values over which to generate data
+#'
+#' @return dataframe of simulated x,y pairs
+#' @export
+#'
+#' @examples
+#' curve_dat <- sim_curve(n=100, b0=0, b1=0, b2=.3, sd=2.6, range=c(-3,3))
+#' plot(curve_dat)
+#' summary(lm(y ~ I(x^2), data=curve_dat))
 sim_curve <- function(n, b0, b1, b2, sd=1, range=c(-3,3)){
   x = runif(n, range[1], range[2])
   y = b0 + x*b1 + x^2*b2 + rnorm(n, 0, sd)
   return(data.frame(x,y))
 }
-# curve_dat <- sim_curve(n=100, b0=0, b1=0, b2=.3, sd=2.6, range=c(-3,3))
-# plot(curve_dat)
-# summary(lm(y ~ I(x^2), data=curve_dat))
+
 
