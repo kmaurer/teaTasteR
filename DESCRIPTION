@@ -1,4 +1,4 @@
-Package: teatastr
+Package: teaTasteR
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -8,6 +8,6 @@ Description: Package for generating Lady Tasting Tea Line-up plots
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/kmaurer/teatastr
-BugReports: https://github.com/kmaurer/teatastr/issues
+URL: https://github.com/kmaurer/teaTasteR
+BugReports: https://github.com/kmaurer/teaTasteR/issues
 RoxygenNote: 6.1.1
