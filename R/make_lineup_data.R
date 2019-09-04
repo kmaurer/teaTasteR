@@ -104,16 +104,17 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
 #' @export
 #'
 #' @examples
-#' dat=data.frame(x=rnorm(5))
-#' dat$y=x+rnorm(5)
+#' dat=data.frame(x=rnorm(25))
+#' dat$y=dat$x+rnorm(25)
 #' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y")
-make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL){
+#' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y",bootstrap=T,jitter=T)
+make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL, bootstrap=FALSE, jitter=FALSE){
   if(!is.null(seed)) set.seed(seed)
   order_types = sample(rep(c("null","alt"),each=M),2*M)
   dat_stacked = NULL
   for(i in 1:(2*M)){
-    if(order_types[i] =="null") dat_i = make_null_dat(dat, xname, yname)
-    if(order_types[i] =="alt") dat_i = make_alt_dat(dat, xname, yname)
+    if(order_types[i] =="null") dat_i = make_null_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
+    if(order_types[i] =="alt") dat_i = make_alt_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
     dat_i$order = i
     dat_stacked = rbind(dat_stacked,dat_i)
   }
