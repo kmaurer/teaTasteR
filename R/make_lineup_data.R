@@ -45,6 +45,7 @@ make_null_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
 #' @param yname column name from dat for y-dimension in plots (defaults "y")
 #' @param bootstrap logical indicator of if (bootstrap==TRUE) bootstrapping used, if (bootstrap==FALSE) then LOESS residuals permuted
 #' @param jitter logical indicator of if jittering should be used on final points
+#' @param both logical indicator to run both LOESS residual permutation and bootstrapping of points
 #'
 #' @return
 #' @export output dataframe with columns x, permy and type
@@ -54,19 +55,8 @@ make_null_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
 #' dat$y=dat$x+rnorm(25)
 #' alt_dat <- make_alt_dat(dat)
 #' alt_dat <- make_alt_dat(dat,bootstrap=T,jitter=T)
-make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
-  if(bootstrap){
-    row_idx <- sample(1:nrow(dat), nrow(dat), replace=T)
-    outdat = data.frame(x=dat[[xname]][row_idx],
-                        permy=dat[[yname]][row_idx],
-                        type="alt")
-    if(jitter){
-      data_resx <- ggvis_resolution(dat[[xname]], zero=T)
-      data_resy <- ggvis_resolution(dat[[yname]], zero=T)
-      outdat$x <- outdat$x + runif(nrow(outdat), -data_resx/2,data_resx/2)
-      outdat$permy <- outdat$permy + runif(nrow(outdat), -data_resy/2,data_resy/2)
-    }
-  }else{
+make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE, both=FALSE){
+  if(bootstrap==FALSE | both==TRUE){
     x=dat[[xname]]
     y=dat[[yname]]
     b=get.dpill(x,y) #bandwidth selection (with robust selection function in kernplus package)
@@ -84,6 +74,23 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
                permy=permy,
                type="alt")
   }
+  if(bootstrap == TRUE | both==TRUE){
+    row_idx <- sample(1:nrow(dat), nrow(dat), replace=T)
+    if(both==TRUE){
+      outdat = outdat[row_idx, ]
+    }else{
+      outdat = data.frame(x=dat[[xname]][row_idx],
+                          permy=dat[[yname]][row_idx],
+                          type="alt")
+    }
+
+    if(jitter){
+      data_resx <- ggvis_resolution(dat[[xname]], zero=T)
+      data_resy <- ggvis_resolution(dat[[yname]], zero=T)
+      outdat$x <- outdat$x + runif(nrow(outdat), -data_resx/2,data_resx/2)
+      outdat$permy <- outdat$permy + runif(nrow(outdat), -data_resy/2,data_resy/2)
+    }
+  }
   return(outdat)
 }
 
@@ -99,6 +106,9 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
 #' @param xname column name from dat for x-dimension in plots (defaults "x")
 #' @param yname column name from dat for y-dimension in plots (defaults "y")
 #' @param seed set random seed for reproducible lineups
+#' @param bootstrap logical indicator of if (bootstrap==TRUE) bootstrapping used, if (bootstrap==FALSE) then LOESS residuals permuted
+#' @param jitter logical indicator of if jittering should be used on final points
+#' @param both logical indicator to run both LOESS residual permutation and bootstrapping of points
 #'
 #' @return dataframe with columns x, permy, type, order
 #' @export
@@ -108,7 +118,7 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=FALSE){
 #' dat$y=dat$x+rnorm(25)
 #' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y")
 #' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y",bootstrap=T,jitter=T)
-make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL, bootstrap=FALSE, jitter=FALSE){
+make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL, bootstrap=FALSE, jitter=FALSE, both=FALSE){
   if(!is.null(seed)) set.seed(seed)
   order_types = sample(rep(c("null","alt"),each=M),2*M)
   dat_stacked = NULL
