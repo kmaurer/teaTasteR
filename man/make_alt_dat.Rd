@@ -4,7 +4,8 @@
 \alias{make_alt_dat}
 \title{Function to make alternate plot data}
 \usage{
-make_alt_dat(dat, xname = "x", yname = "y")
+make_alt_dat(dat, xname = "x", yname = "y", bootstrap = FALSE,
+  jitter = 0, both = FALSE)
 }
 \arguments{
 \item{dat}{dataframe}
@@ -12,13 +13,20 @@ make_alt_dat(dat, xname = "x", yname = "y")
 \item{xname}{column name from dat for x-dimension in plots (defaults "x")}
 
 \item{yname}{column name from dat for y-dimension in plots (defaults "y")}
+
+\item{bootstrap}{logical indicator of if (bootstrap==TRUE) bootstrapping used, if (bootstrap==FALSE) then LOESS residuals permuted}
+
+\item{jitter}{amount of jitter to add to point locations - units of sds}
+
+\item{both}{logical indicator to run both LOESS residual permutation and bootstrapping of points}
 }
 \description{
 capture mean structure between X and Y with local linear
  regression with optimal bandwidth, then permute residuals
 }
 \examples{
-dat=data.frame(x=rnorm(5))
-dat$y=x+rnorm(5)
+dat=data.frame(x=rnorm(25))
+dat$y=dat$x+rnorm(25)
 alt_dat <- make_alt_dat(dat)
+alt_dat <- make_alt_dat(dat,bootstrap=T,jitter=T)
 }

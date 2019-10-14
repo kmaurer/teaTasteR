@@ -2,7 +2,7 @@
 #'
 #' @param lineup_dat dataframe structured from \code{\link{make_lineup_dat}}
 #'
-#' @return ggplot
+#' @return lineup faceted ggplot object
 #' @export
 #'
 #' @examples

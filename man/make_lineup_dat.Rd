@@ -4,7 +4,8 @@
 \alias{make_lineup_dat}
 \title{Make a lineup plot data}
 \usage{
-make_lineup_dat(M, dat, xname = "x", yname = "y", seed = NULL)
+make_lineup_dat(M, dat, xname = "x", yname = "y", seed = NULL,
+  bootstrap = FALSE, jitter = 0, both = FALSE)
 }
 \arguments{
 \item{M}{number of pairs of plots}
@@ -16,6 +17,12 @@ make_lineup_dat(M, dat, xname = "x", yname = "y", seed = NULL)
 \item{yname}{column name from dat for y-dimension in plots (defaults "y")}
 
 \item{seed}{set random seed for reproducible lineups}
+
+\item{bootstrap}{logical indicator of if (bootstrap==TRUE) bootstrapping used, if (bootstrap==FALSE) then LOESS residuals permuted}
+
+\item{jitter}{amount of jitter to add to point locations - units of sds}
+
+\item{both}{logical indicator to run both LOESS residual permutation and bootstrapping of points}
 }
 \value{
 dataframe with columns x, permy, type, order
@@ -26,7 +33,8 @@ Function to create stacked dataframe with M pairs of plots
  order labels used in building plot lineup
 }
 \examples{
-dat=data.frame(x=rnorm(5))
-dat$y=x+rnorm(5)
+dat=data.frame(x=rnorm(25))
+dat$y=dat$x+rnorm(25)
 lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y")
+lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y",bootstrap=T,jitter=T)
 }

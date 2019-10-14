@@ -10,7 +10,7 @@ tt_lineup_plot(lineup_dat)
 \item{lineup_dat}{dataframe structured from \code{\link{make_lineup_dat}}}
 }
 \value{
-ggplot
+lineup faceted ggplot object
 }
 \description{
 Function to generate tea-tasting lineup
