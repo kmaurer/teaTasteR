@@ -16,7 +16,7 @@ tt_lineup_plot = function(lineup_dat){
                                 levels=paste("Plot",min(lineup_dat$order):max(lineup_dat$order)) )
   ggplot2::ggplot()+
     ggplot2::geom_point(ggplot2::aes(x=x,y=permy), data=lineup_dat) +
-    ggplot2::facet_wrap(~facet_lab)+
+    ggplot2::facet_wrap(~facet_lab,nrow=2)+
     ggplot2::labs(x="",y="")+
     ggplot2::theme_bw()+
     ggplot2::theme(panel.spacing = ggplot2::unit(.75, "cm"),

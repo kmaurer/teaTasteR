@@ -94,6 +94,15 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=0, both=F
   return(outdat)
 }
 
+add_partitions <- function(dat,npart){
+  if(nrow(dat) %% npart == 0){ # if perfectly divisible
+    dat$order <- sample(rep(1:npart, each=(nrow(dat)%/%npart)))
+  } else { # if not perfectly divisible
+    dat$order <- sample(c(rep(1:(nrow(dat) %% npart), each=(nrow(dat)%/%npart + 1)),
+                          rep((nrow(dat) %% npart + 1):npart,each=(nrow(dat)%/%npart)) ) )
+  }
+  return(dat)
+}
 
 #' Make a lineup plot data
 #'
@@ -118,18 +127,35 @@ make_alt_dat=function(dat,xname="x",yname="y", bootstrap=FALSE, jitter=0, both=F
 #' dat$y=dat$x+rnorm(25)
 #' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y")
 #' lineup_dat = make_lineup_dat(M=8, dat, xname="x", yname="y",bootstrap=T,jitter=T)
-make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL, bootstrap=FALSE, jitter=0, both=FALSE){
+make_lineup_dat=function(M, dat, xname="x", yname="y", seed=NULL, bootstrap=FALSE, jitter=0, both=FALSE, partitions=FALSE){
   if(!is.null(seed)) set.seed(seed)
   order_types = sample(rep(c("null","alt"),each=M),2*M)
   dat_stacked = NULL
-  for(i in 1:(2*M)){
-    if(order_types[i] =="null") dat_i = make_null_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
-    if(order_types[i] =="alt") dat_i = make_alt_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
-    dat_i$order = i
-    dat_stacked = rbind(dat_stacked,dat_i)
+  if(partitions==FALSE){
+    for(i in 1:(2*M)){
+      if(order_types[i] =="null") dat_i = make_null_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
+      if(order_types[i] =="alt") dat_i = make_alt_dat(dat, xname, yname, bootstrap=bootstrap, jitter=jitter)
+      dat_i$order = i
+      dat_stacked = rbind(dat_stacked,dat_i)
+    }
+  }else{
+    dat <- add_partitions(dat, 2*M)
+    for(i in 1:(2*M)){
+      if(order_types[i] =="null") dat_i = make_null_dat(dat[dat$order==i,], xname, yname, bootstrap=FALSE, jitter=FALSE)
+      if(order_types[i] =="alt"){
+        dat_i = data.frame(x=dat[dat$order==i,xname],
+                   permy=dat[dat$order==i,yname],
+                   type="alt")
+      }
+      dat_i$order = i
+      dat_stacked = rbind(dat_stacked,dat_i)
+    }
   }
   dat_stacked
 }
+
+
+
 
 ## robust kernel selection function
 # source: https://rdrr.io/cran/kernplus/src/R/est_bandwidth.R
